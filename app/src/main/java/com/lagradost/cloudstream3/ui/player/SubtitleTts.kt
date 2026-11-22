@@ -205,16 +205,13 @@ object SubtitleTts {
             .coerceIn(1, 60) * 1000L
         val now = SystemClock.elapsedRealtime()
 
-        var item: Item? = null
-        while (queue.isNotEmpty()) {
-            val candidate = queue.removeFirst()
-            if (!pauseMode && now - candidate.enqueuedAt > dropMs) {
-                Log.d(TAG, "Dropped stale line: ${candidate.text}")
-                continue
+        // Bỏ các câu đã chờ quá lâu (trừ chế độ chờ), rồi lấy câu đầu tiên còn lại
+        if (!pauseMode) {
+            while (queue.isNotEmpty() && now - queue.first().enqueuedAt > dropMs) {
+                Log.d(TAG, "Dropped stale line: ${queue.removeFirst().text}")
             }
-            item = candidate
-            break
         }
+        val item = queue.removeFirstOrNull()
         if (item == null) {
             onIdle()
             return
