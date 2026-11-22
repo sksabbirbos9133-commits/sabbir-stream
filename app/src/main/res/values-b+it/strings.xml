@@ -3,7 +3,7 @@
     <!-- FORMAT MIGHT TRANSLATE, WILL CAUSE CRASH IF APPLIED WRONG -->
     <string name="app_dub_sub_episode_text_format" formatted="true">%1$s Ep %2$d</string>
     <string name="cast_format" formatted="true">Cast: %s</string>
-    <string name="next_episode_format" formatted="true">L\'episodio %d uscirà in</string>
+    <string name="next_episode_format" formatted="true">L\'episodio %d uscirà tra</string>
     <string name="next_episode_time_day_format" formatted="true">%1$dd %2$dh %3$dm</string>
     <string name="next_episode_time_hour_format" formatted="true">%1$dh %2$dm</string>
     <string name="next_episode_time_min_format" formatted="true">%d min</string>
@@ -614,7 +614,7 @@
     <string name="pref_category_security">Sicurezza</string>
     <string name="auth_locally">Autenticazione locale</string>
     <string name="qr_image">Immagine codice QR</string>
-    <string name="dismiss">Respingi</string>
+    <string name="dismiss">Chiudi</string>
     <string name="open_downloaded_repo">Apri repository</string>
     <string name="device_pin_url_message">Visita <b>%s</b> sul tuo smartphone o computer e inserisci il codice sopra</string>
     <string name="device_pin_error_message">Impossibile ottenere il codice PIN del dispositivo, prova l\'autenticazione locale</string>
