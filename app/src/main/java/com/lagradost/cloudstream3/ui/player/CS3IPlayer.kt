@@ -607,6 +607,7 @@ class CS3IPlayer : IPlayer {
 
         currentTextRenderer = null
         currentSubtitleDecoder = null
+        SubtitleTts.release()
 
         exoPlayer?.apply {
             playWhenReady = false
@@ -1237,6 +1238,20 @@ class CS3IPlayer : IPlayer {
                         val combinedCues = styledBitmapCues + styledTextCues
 
                         subtitleHelper.subtitleView?.setCues(combinedCues)
+
+                        // Đọc phụ đề bằng giọng đọc (nếu bật trong Cài đặt phụ đề)
+                        SubtitleTts.onSubtitleText(
+                            context = context,
+                            text = styledTextCues.joinToString("\n") { it.text ?: "" },
+                            host = SubtitleTts.Host(
+                                getVolume = { exoPlayer?.volume ?: 1f },
+                                setVolume = { v -> exoPlayer?.volume = v },
+                                isPlayRequested = { exoPlayer?.playWhenReady == true },
+                                setPlaying = { play ->
+                                    if (play) exoPlayer?.play() else exoPlayer?.pause()
+                                },
+                            ),
+                        )
                     }
 
                     factory.createRenderers(
@@ -1647,6 +1662,9 @@ class CS3IPlayer : IPlayer {
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     super.onIsPlayingChanged(isPlaying)
+                    // Chỉ dừng đọc khi người dùng thật sự tạm dừng, không dừng khi đang buffer
+                    if (!isPlaying && exoPlayer?.playWhenReady == false) SubtitleTts.stop()
+                    if (isPlaying) SubtitleTts.onPlaying()
                     if (isPlaying) {
                         event(RequestAudioFocusEvent())
                         onRenderFirst()
